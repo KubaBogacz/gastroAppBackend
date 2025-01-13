@@ -31,19 +31,36 @@ def get_user(
         raise HTTPException(status_code=404, detail="User not found")
     return user
 
-@router.patch("/{user_uuid}", response_model=UserOut)
-def update_user_score(
-    user_uuid: str, 
-    data: UserUpdate, 
+@router.get("/bylogin/{login}", response_model=UserOut)
+def get_user_by_login(
+    login: str,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-    """Aktualizuje score, tylko dla zalogowanych."""
+    user = db.query(User).filter(User.login == login).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    return user
+
+
+@router.patch("/{user_uuid}", response_model=UserOut)
+def update_user(
+    user_uuid: str,
+    data: UserUpdate,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    print(data)
     user = db.query(User).filter(User.uuid == user_uuid).first()
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
     
-    user.score = data.score
+    # tylko uaktualniamy, co przychodzi
+    if data.score is not None:
+        user.score = data.score
+    if data.is_onboarded is not None:
+        user.is_onboarded = data.is_onboarded
+    
     db.commit()
     db.refresh(user)
     return user

@@ -62,18 +62,32 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
         detail="Could not validate credentials",
         headers={"WWW-Authenticate": "Bearer"},
     )
+
+    print(f"[DEBUG] Token otrzymany w get_current_user: {token}")
+
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        print(f"[DEBUG] Payload z tokenu: {payload}")
+
         user_login: str = payload.get("sub")
+        print(f"[DEBUG] user_login z payload (sub): {user_login}")
+
         if user_login is None:
+            print("[DEBUG] user_login jest None -> CredentialsException")
             raise credentials_exception
-    except JWTError:
+
+    except JWTError as e:
+        print(f"[DEBUG] Błąd JWT decode: {e}")
         raise credentials_exception
 
     user = db.query(User).filter(User.login == user_login).first()
     if user is None:
+        print(f"[DEBUG] W bazie nie znaleziono usera o loginie: {user_login}")
         raise credentials_exception
+
+    print(f"[DEBUG] Zwracam usera: {user}")
     return user
+
 
 @router.post("/login")
 def login(login_data: UserLogin, db: Session = Depends(get_db)):

@@ -1,6 +1,6 @@
 # app/models/user.py
 import uuid
-from sqlalchemy import Column, String, Float, Date
+from sqlalchemy import Column, String, Float, Date, Boolean
 from app.database import Base
 
 class User(Base):
@@ -15,3 +15,4 @@ class User(Base):
     weight = Column(Float, nullable=False)
     birth_date = Column(Date, nullable=False)
     score = Column(Float, default=0.0)
+    is_onboarded = Column(Boolean, default=False)

@@ -8,6 +8,7 @@ class UserBase(BaseModel):
     weight: float
     birth_date: date
     score: float = 0.0
+    is_onboarded: bool = False
 
 class UserCreate(UserBase):
     """Schemat używany przy rejestracji nowego użytkownika."""
@@ -21,7 +22,8 @@ class UserLogin(BaseModel):
 
 class UserUpdate(BaseModel):
     """Schemat używany przy np. aktualizacji score."""
-    score: float
+    is_onboarded: bool = None
+    score: float = None
 
 class UserOut(UserBase):
     uuid: str
