@@ -14,5 +14,7 @@ class User(Base):
     height = Column(Float, nullable=False)
     weight = Column(Float, nullable=False)
     birth_date = Column(Date, nullable=False)
-    score = Column(Float, default=0.0)
-    is_onboarded = Column(Boolean, default=False)
+
+    score = Column(Float, default=0.0) # HP pacjenta (0-100)
+    is_onboarded = Column(Boolean, default=False) # to tez do dodania
+    # check czy pacjent w tym tygodniu uzupełnił ankiete

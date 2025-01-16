@@ -13,9 +13,9 @@ class Drug(Base):
     name = Column(String, nullable=False)
     dosage = Column(String, nullable=False)
     date_from = Column(DateTime, nullable=False)
-    date_to = Column(DateTime, nullable=False)
+    date_to = Column(DateTime, nullable=False) # nie określony termin, dopóki lekarz nie odwoła
     additional_info = Column(String, nullable=True)
 
-    times = Column(Text, nullable=True)
+    times = Column(Text, nullable=True) # godziny w których pacjent ma przyjąć lek
 
     is_notification_enabled = Column(Boolean, default=False)
